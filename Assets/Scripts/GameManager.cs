@@ -17,6 +17,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.Instantiate("[Character]", spawn.transform.position, Quaternion.identity);
         C1.enabled = false;
+        
+        // Cursor lock
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Cursor visible
+        Cursor.visible = false;
     }
 
 
