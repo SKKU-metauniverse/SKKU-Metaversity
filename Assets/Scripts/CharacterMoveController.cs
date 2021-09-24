@@ -7,12 +7,13 @@ using Photon.Realtime;
 public class CharacterMoveController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private Transform characterBody;
+    private GameObject characterBody;
     [SerializeField]
-    private Transform cameraArm;
-    
+    private GameObject cameraArm;
+
     public float moveSpeed = 5.0f;
     public PhotonView PV;
+    public Camera Cmine;
 
     Animator animator;
     string animationState = "Run";
@@ -23,11 +24,25 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         Debug.Log("Start");
         animator = GetComponent<Animator>();
         gameObject.SetActive(true);
+        if (!PV.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+        }
+        Cmine.enabled = true;
 
+        cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
+
+        Debug.Log(characterBody.transform.localPosition);
+        Debug.Log(cameraArm.transform.localPosition);
     }
 
     // Update is called once per frame
-    void Update()
+
+    private void FixedUpdate()
+    {
+    }
+
+    private void Update()
     {
         LookAround();
         Move();
@@ -36,7 +51,7 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     private void LookAround()
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        Vector3 camAngle = cameraArm.rotation.eulerAngles;
+        Vector3 camAngle = cameraArm.transform.rotation.eulerAngles;
         float x = camAngle.x - mouseDelta.y;
 
         if (x < 180f)
@@ -51,7 +66,7 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         // camAngle Up(-) and Down(+) : x, Left(-) and Right(+) : y, Front and Back : z
         // Debug.Log(mouseDelta);
 
-        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+        cameraArm.transform.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
     }
 
     private void Move()
@@ -64,18 +79,26 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
 
             if (isMove)
             {
-                Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
-                Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
+                Vector3 lookForward = new Vector3(cameraArm.transform.forward.x, 0f, cameraArm.transform.forward.z).normalized;
+                Vector3 lookRight = new Vector3(cameraArm.transform.right.x, 0f, cameraArm.transform.right.z).normalized;
                 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
                 //Debug.Log(GetAngle(characterBody.forward, moveDir));
                 //Debug.DrawRay(characterBody.position, characterBody.forward, Color.red);
                 //Debug.DrawRay(characterBody.position, moveDir, Color.blue);
                 
-                characterBody.forward = moveDir;
+                characterBody.transform.forward = moveDir;
                 //pv.rpc("changeforward", rpctarget.all, movedir);
                 //characterBody.transform.Rotate(new Vector3(0, GetAngle(characterBody.forward, moveDir), 0));
+                
+
                 this.transform.position += moveDir.normalized * moveSpeed * Time.deltaTime;
+                cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
+                
+                //cameraArm.transform.position = characterBody.transform.position;
+
+                Debug.Log(characterBody.transform.localPosition);
+                Debug.Log(cameraArm.transform.localPosition);
             }
         }
         
