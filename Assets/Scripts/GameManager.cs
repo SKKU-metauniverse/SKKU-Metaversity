@@ -7,20 +7,36 @@ using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    void LoadArena()
-    {
-        Debug.Log("LOAD ARENA");
-    }
 
-    public void LeaveRoom()
-    {
-        PhotonNetwork.LeaveRoom();
-    }
+    #region Private
+    [SerializeField]
+    private GameObject escapePN;
+
+    #endregion
+
+    #region Public
+    public GameObject spawn;
+    public Camera C1;
+    #endregion
 
     private void Start()
     {
-        PhotonNetwork.Instantiate("[Character]", new Vector3(0, 1, 0), Quaternion.identity);
+        PhotonNetwork.Instantiate("[Character]", spawn.transform.position, Quaternion.identity);
+        C1.enabled = false;
+
+        escapePN.SetActive(false);
+        
+        // Cursor lock
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Cursor visible
+        Cursor.visible = false;
+
+
     }
+
+
+    #region PunCallbacks
 
     public override void OnLeftRoom()
     {
@@ -42,4 +58,30 @@ public class GameManager : MonoBehaviourPunCallbacks
         //LoadArena();
         Debug.Log("OnPlayerLeftRoom : Someone BYE~~~");
     }
+
+    #endregion
+
+
+    void LoadArena()
+    {
+        Debug.Log("LOAD ARENA");
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public void downPanel()
+    {
+        // Cursor lock
+        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor visible
+        Cursor.visible = false;
+        escapePN.SetActive(false);
+    }
+
+    
+
+    
 }
