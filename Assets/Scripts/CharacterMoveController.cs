@@ -93,9 +93,8 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
                 
 
                 this.transform.position += moveDir.normalized * moveSpeed * Time.deltaTime;
-                cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
-                
-                //cameraArm.transform.position = characterBody.transform.position;
+                //cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
+                cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + GameObject.Find("Spawn").transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
 
                 Debug.Log(characterBody.transform.localPosition);
                 Debug.Log(cameraArm.transform.localPosition);
