@@ -68,14 +68,19 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
                 Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
                 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
+                //Debug.Log(GetAngle(characterBody.forward, moveDir));
+                //Debug.DrawRay(characterBody.position, characterBody.forward, Color.red);
+                //Debug.DrawRay(characterBody.position, moveDir, Color.blue);
+                
                 characterBody.forward = moveDir;
-                //PV.RPC("changeForward", RpcTarget.All, moveDir);
-                //this.characterBody.transform.Rotate(moveDir.x, moveDir.y, moveDir.z);
+                //pv.rpc("changeforward", rpctarget.all, movedir);
+                //characterBody.transform.Rotate(new Vector3(0, GetAngle(characterBody.forward, moveDir), 0));
                 this.transform.position += moveDir.normalized * moveSpeed * Time.deltaTime;
             }
         }
         
     }
+
 
     //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     //{

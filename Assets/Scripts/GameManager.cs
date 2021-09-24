@@ -7,6 +7,7 @@ using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    public GameObject spawn;
     void LoadArena()
     {
         Debug.Log("LOAD ARENA");
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        PhotonNetwork.Instantiate("[Character]", new Vector3(0, 1, 0), Quaternion.identity);
+        PhotonNetwork.Instantiate("[Character]", spawn.transform.position, Quaternion.identity);
     }
 
     public override void OnLeftRoom()
