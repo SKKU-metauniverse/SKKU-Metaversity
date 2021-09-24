@@ -19,14 +19,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         //Cursor active
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-
     }
 
     // Start is called before the first frame update
     void Start()
     {
         Screen.SetResolution(960, 540, false);
-        Connect();
     }
 
     // Update is called once per frame
@@ -37,9 +35,18 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void Connect()
     {
-        // Connect Internet
-        PhotonNetwork.GameVersion = gameVersion;
-        PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
+        isConnecting = true;
+
+        if (!PhotonNetwork.IsConnected)
+        {
+            // Connect Internet
+            PhotonNetwork.GameVersion = gameVersion;
+            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
+        }
+        else
+        {
+            PhotonNetwork.JoinOrCreateRoom("SKKU", new RoomOptions { MaxPlayers = numPlayers }, null);
+        }
 
     }
 
@@ -47,7 +54,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         base.OnConnectedToMaster();
         Debug.Log("connection complete!");
-        PhotonNetwork.JoinOrCreateRoom("SKKU", new RoomOptions { MaxPlayers = numPlayers }, null);
+        
+        if(isConnecting)
+            PhotonNetwork.JoinOrCreateRoom("SKKU", new RoomOptions { MaxPlayers = numPlayers }, null);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
