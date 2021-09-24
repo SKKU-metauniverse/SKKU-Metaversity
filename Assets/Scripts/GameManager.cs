@@ -8,6 +8,12 @@ using Photon.Realtime;
 public class GameManager : MonoBehaviourPunCallbacks
 {
 
+    #region Private
+    [SerializeField]
+    private GameObject escapePN;
+
+    #endregion
+
     #region Public
     public GameObject spawn;
     public Camera C1;
@@ -17,12 +23,16 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.Instantiate("[Character]", spawn.transform.position, Quaternion.identity);
         C1.enabled = false;
+
+        escapePN.SetActive(false);
         
         // Cursor lock
         Cursor.lockState = CursorLockMode.Locked;
 
         // Cursor visible
         Cursor.visible = false;
+
+
     }
 
 
@@ -60,6 +70,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    public void downPanel()
+    {
+        // Cursor lock
+        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor visible
+        Cursor.visible = false;
+        escapePN.SetActive(false);
     }
 
     

@@ -73,6 +73,13 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     {
         if (PV.IsMine)
         {
+            if (Input.GetKeyDown("escape"))
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+                GameObject.Find("Canvas").transform.Find("Escape Panel").gameObject.SetActive(true);
+            }
+
             Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             bool isMove = moveInput.magnitude != 0;
             animator.SetBool(animationState, isMove);
