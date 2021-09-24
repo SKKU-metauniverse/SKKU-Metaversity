@@ -13,6 +13,7 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     
     public float moveSpeed = 5.0f;
     public PhotonView PV;
+    public Camera Cmine;
 
     Animator animator;
     string animationState = "Run";
@@ -23,7 +24,11 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         Debug.Log("Start");
         animator = GetComponent<Animator>();
         gameObject.SetActive(true);
-
+        if (!PV.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+        }
+        Cmine.enabled = true;
     }
 
     // Update is called once per frame

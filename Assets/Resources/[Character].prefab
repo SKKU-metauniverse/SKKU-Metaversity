@@ -142,6 +142,7 @@ MonoBehaviour:
   cameraArm: {fileID: 4671871136046394353}
   moveSpeed: 5
   PV: {fileID: -3263108101389428179}
+  Cmine: {fileID: 4671871137093020593}
 --- !u!114 &-3263108101389428179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +164,6 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 2136183869146254265}
   - {fileID: 4973302095206100795}
-  - {fileID: 5806679715799900996}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

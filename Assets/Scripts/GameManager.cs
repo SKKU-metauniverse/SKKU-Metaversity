@@ -7,21 +7,20 @@ using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    public GameObject spawn;
-    void LoadArena()
-    {
-        Debug.Log("LOAD ARENA");
-    }
 
-    public void LeaveRoom()
-    {
-        PhotonNetwork.LeaveRoom();
-    }
+    #region Public
+    public GameObject spawn;
+    public Camera C1;
+    #endregion
 
     private void Start()
     {
         PhotonNetwork.Instantiate("[Character]", spawn.transform.position, Quaternion.identity);
+        C1.enabled = false;
     }
+
+
+    #region PunCallbacks
 
     public override void OnLeftRoom()
     {
@@ -43,4 +42,21 @@ public class GameManager : MonoBehaviourPunCallbacks
         //LoadArena();
         Debug.Log("OnPlayerLeftRoom : Someone BYE~~~");
     }
+
+    #endregion
+
+
+    void LoadArena()
+    {
+        Debug.Log("LOAD ARENA");
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    
+
+    
 }
