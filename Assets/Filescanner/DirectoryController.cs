@@ -6,6 +6,7 @@ using System;
 
 public class DirectoryController : MonoBehaviour
 {
+    private DirectoryInfo defaultDirectory;
     private DirectoryInfo currentDirectory;
     private DIrectorySpawner directorySpawner;
 
@@ -14,10 +15,12 @@ public class DirectoryController : MonoBehaviour
         Application.runInBackground = true;
 
         directorySpawner = GetComponent<DIrectorySpawner>();
-        directorySpawner.Setup();
+        directorySpawner.Setup(this);
 
         string desktopFoleder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        defaultDirectory = new DirectoryInfo(desktopFoleder);
         currentDirectory = new DirectoryInfo(desktopFoleder);
+        
 
         UpdateDirectory(currentDirectory);
     }
@@ -32,6 +35,50 @@ public class DirectoryController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if ( Input.GetKeyDown(KeyCode.Escape))
+        {
+            UpdateDirectory(defaultDirectory);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            MoveToParentFolder(currentDirectory);
+        }
+    }
+
+
+    private void MoveToParentFolder(DirectoryInfo directory)
+    {
+        if (directory.Parent == null) return;
+
+        UpdateDirectory(directory.Parent);
+    }
+
+    public void UpdateInputs(string data)
+    {
+        if ( data.Equals("...") )
+        {
+            MoveToParentFolder(currentDirectory);
+
+            return;
+        }
+
+        foreach ( DirectoryInfo directory in currentDirectory.GetDirectories() )
+        {
+            if ( data.Equals(directory.Name))
+            {
+                UpdateDirectory(directory);
+
+                return;
+            }
+        }
+
+        foreach ( FileInfo file in currentDirectory.GetFiles() )
+        {
+            if (data.Equals(file.Name))
+            {
+                Debug.Log($"선택한 파일 이름 : {file.FullName}");
+            }
+        }
     }
 }

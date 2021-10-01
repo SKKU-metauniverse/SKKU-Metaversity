@@ -18,10 +18,14 @@ public class DIrectorySpawner : MonoBehaviour
     [SerializeField]
     private Transform parentContent;
 
+    private DirectoryController directoryController;
+
     private List<Data> fileList;
 
-    public void Setup ()
+    public void Setup ( DirectoryController controller )
     {
+        directoryController = controller;
+
         fileList = new List<Data>();
     }
 
@@ -74,7 +78,7 @@ public class DIrectorySpawner : MonoBehaviour
         clone.transform.localScale = Vector3.one;
 
         Data data = clone.GetComponent<Data>();
-        data.Setup(fileName, type);
+        data.Setup(directoryController, fileName, type);
 
         fileList.Add(data);
     }

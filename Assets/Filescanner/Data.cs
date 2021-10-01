@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public enum DataType { Directory = 0, File }
 
-public class Data : MonoBehaviour
+public class Data : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
     [SerializeField]
     private Sprite[] spriteIcons;
@@ -21,8 +22,12 @@ public class Data : MonoBehaviour
 
     private int maxFileNameLength = 25;
 
-    public void Setup(string fileName, DataType dataType)
+    private DirectoryController directoryController;
+
+    public void Setup(DirectoryController controller, string fileName, DataType dataType)
     {
+        directoryController = controller;
+
         imageIcon = GetComponentInChildren<Image>();
         textDataName = GetComponentInChildren<TextMeshProUGUI>();
 
@@ -69,4 +74,22 @@ public class Data : MonoBehaviour
     {
         
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        textDataName.color = Color.red;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        directoryController.UpdateInputs(fileName);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+
+        SetTextColor();
+    }
+
+
 }
