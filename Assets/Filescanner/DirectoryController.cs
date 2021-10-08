@@ -6,6 +6,9 @@ using System;
 
 public class DirectoryController : MonoBehaviour
 {
+    [SerializeField] FileLoaderSystem fileLoaderSystem;
+
+
     private DirectoryInfo defaultDirectory;
     private DirectoryInfo currentDirectory;
     private DIrectorySpawner directorySpawner;
@@ -77,7 +80,7 @@ public class DirectoryController : MonoBehaviour
         {
             if (data.Equals(file.Name))
             {
-                Debug.Log($"선택한 파일 이름 : {file.FullName}");
+                fileLoaderSystem.LoadFile(file);
             }
         }
     }
