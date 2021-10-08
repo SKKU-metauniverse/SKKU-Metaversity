@@ -13,10 +13,16 @@ public class Launcher : MonoBehaviourPunCallbacks
     private byte numPlayers = 4;
     [SerializeField]
     private InputField inputField;
+    [SerializeField]
+    private GameObject startPanel;
+    [SerializeField]
+    private GameObject selectPanel;
 
     string gameVersion = "1";
     bool isConnecting = false;
     bool isCreate = false;
+    int roomType = 0;
+
 
     string roomName;
 
@@ -29,18 +35,34 @@ public class Launcher : MonoBehaviourPunCallbacks
         //Cursor active
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
+
+        toStartPanel();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         Screen.SetResolution(960, 540, false);
+
+        toStartPanel(); 
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void toSelectPanel()
+    {
+        startPanel.SetActive(false);
+        selectPanel.SetActive(true);
+    }
+
+    public void toStartPanel()
+    {
+        startPanel.SetActive(true);
+        selectPanel.SetActive(false);
     }
 
     public static string RandomString(int _nLength = 12)
@@ -55,6 +77,19 @@ public class Launcher : MonoBehaviourPunCallbacks
         string strRet = new String(chRandom);   // char to string
         return strRet;
     }
+
+    public void createBasic()
+    {
+        roomType = 1;
+        Create();
+    }
+
+    public void createNature()
+    {
+        roomType = 2;
+        Create();
+    }
+    
     public void Create()
     {
         isConnecting = true;
@@ -124,9 +159,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
             Debug.Log("We load the class ");
-
-            PhotonNetwork.LoadLevel("NatureClassroom");
+            if(roomType == 1) PhotonNetwork.LoadLevel("BasicClassroom");
+            else if(roomType == 2) PhotonNetwork.LoadLevel("NatureClassroom");
         }
         
     }
+
 }
