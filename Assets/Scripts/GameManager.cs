@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     #region Public
     public GameObject spawn;
     public Camera C1;
+    public GameObject fileScanner;
     #endregion
 
     private void Start()
@@ -78,10 +79,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void downPanel()
     {
-        // Cursor lock
-        Cursor.lockState = CursorLockMode.Locked;
-        // Cursor visible
-        Cursor.visible = false;
+        if (!fileScanner.activeSelf)
+        {
+            // Cursor lock
+            Cursor.lockState = CursorLockMode.Locked;
+            // Cursor visible
+            Cursor.visible = false;
+        }
+        
         escapePN.SetActive(false);
     }
 
