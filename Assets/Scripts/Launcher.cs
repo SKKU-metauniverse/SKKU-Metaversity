@@ -13,8 +13,11 @@ public class Launcher : MonoBehaviourPunCallbacks
     private byte numPlayers = 4;
     [SerializeField]
     private InputField inputField;
+    [SerializeField]
+    private GameObject roomTypePN;
 
     string gameVersion = "1";
+    string roomType = "";
     bool isConnecting = false;
     bool isCreate = false;
 
@@ -35,6 +38,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     void Start()
     {
         Screen.SetResolution(960, 540, false);
+        roomTypePN.SetActive(false);
     }
 
     // Update is called once per frame
@@ -55,22 +59,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         string strRet = new String(chRandom);   // char to string
         return strRet;
     }
-    public void Create()
+    public void TurnOnRoomTypePanel()
     {
-        isConnecting = true;
-        isCreate = true;
-
-        if (!PhotonNetwork.IsConnected)
-        {
-            // Connect Internet
-            PhotonNetwork.GameVersion = gameVersion;
-            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
-        }
-        else
-        {
-            roomName = RandomString();
-            PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = numPlayers }, null);
-        }
+        roomTypePN.SetActive(true);
 
     }
 
@@ -125,8 +116,28 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             Debug.Log("We load the class ");
 
-            PhotonNetwork.LoadLevel("BasicClassroom");
+            //PhotonNetwork.LoadLevel("BasicClassroom");
+            PhotonNetwork.LoadLevel(roomType);
         }
         
+    }
+
+    public void CreateRoom(string _roomType)
+    {
+        roomType = _roomType;
+        isConnecting = true;
+        isCreate = true;
+
+        if (!PhotonNetwork.IsConnected)
+        {
+            // Connect Internet
+            PhotonNetwork.GameVersion = gameVersion;
+            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
+        }
+        else
+        {
+            roomName = RandomString();
+            PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = numPlayers }, null);
+        }
     }
 }
