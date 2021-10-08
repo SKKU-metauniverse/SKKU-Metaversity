@@ -125,7 +125,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             Debug.Log("We load the class ");
 
-            PhotonNetwork.LoadLevel("BasicClassroom");
+            PhotonNetwork.LoadLevel("NatureClassroom");
         }
         
     }
