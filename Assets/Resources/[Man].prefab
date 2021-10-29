@@ -100,9 +100,8 @@ GameObject:
   - component: {fileID: -3263108101389428179}
   - component: {fileID: 2136183869146254265}
   - component: {fileID: 4973302095206100795}
-  - component: {fileID: 4536933390972829896}
   m_Layer: 0
-  m_Name: '[Character]'
+  m_Name: '[Man]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221,20 +220,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
---- !u!136 &4536933390972829896
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4671871136197914348}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.25
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &4671871137093020595
 GameObject:
   m_ObjectHideFlags: 0
