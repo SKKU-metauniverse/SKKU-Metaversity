@@ -160,6 +160,7 @@ MonoBehaviour:
   moveSpeed: 5
   PV: {fileID: -3263108101389428179}
   Cmine: {fileID: 4671871137093020593}
+  PDFCam: {fileID: 0}
 --- !u!114 &-3263108101389428179
 MonoBehaviour:
   m_ObjectHideFlags: 0

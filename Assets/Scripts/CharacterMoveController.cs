@@ -14,6 +14,7 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     public float moveSpeed = 5.0f;
     public PhotonView PV;
     public Camera Cmine;
+    public Camera PDFCam;
 
     Animator animator;
     string animationState = "Run";
