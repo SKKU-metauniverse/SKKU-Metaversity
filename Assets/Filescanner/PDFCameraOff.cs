@@ -17,4 +17,10 @@ public class PDFCameraOff : MonoBehaviour
             }
         }
     }
+
+    public void OnCursor()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+    }
 }

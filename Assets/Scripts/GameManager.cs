@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         PhotonNetwork.Instantiate("[Character]", spawn.transform.position, Quaternion.identity);
-        C1.enabled = false;
+        //C1.enabled = false;
 
         escapePN.SetActive(false);
         
