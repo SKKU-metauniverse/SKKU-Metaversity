@@ -31,9 +31,6 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         Cmine.enabled = true;
 
         cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
-
-        Debug.Log(characterBody.transform.localPosition);
-        Debug.Log(cameraArm.transform.localPosition);
     }
 
     // Update is called once per frame
@@ -103,29 +100,8 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
                 //cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
                 cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + GameObject.Find("Spawn").transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
 
-                Debug.Log(characterBody.transform.localPosition);
-                Debug.Log(cameraArm.transform.localPosition);
             }
         }
         
     }
-
-
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    if (stream.IsWriting)
-    //    {
-    //        stream.SendNext(moveDir);
-    //    }
-    //    else
-    //    {
-    //        this.moveDir = (Vector3)stream.ReceiveNext();
-    //    }
-    //}
-
-    //[PunRPC]
-    //void changeForward(Vector3 dir)
-    //{
-    //    characterBody.forward = dir;
-    //}
 }

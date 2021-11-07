@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 
 public class Launcher : MonoBehaviourPunCallbacks
@@ -15,13 +16,15 @@ public class Launcher : MonoBehaviourPunCallbacks
     private InputField inputField;
     [SerializeField]
     private GameObject roomTypePN;
+    [SerializeField]
+    private Dropdown dropDown;
 
     string gameVersion = "1";
-    string roomType = "";
-    bool isConnecting = false;
-    bool isCreate = false;
 
     string roomName;
+    string roomType;
+    string characterType = "[Woman]";
+    bool isCreate;
 
     private static System.Random random = new System.Random((int)DateTime.Now.Ticks & 0x0000FFFF); //랜덤 시드값
 
@@ -39,12 +42,20 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Screen.SetResolution(960, 540, false);
         roomTypePN.SetActive(false);
+
+        if (!PhotonNetwork.IsConnectedAndReady)
+        {
+            // Connect Internet
+            PhotonNetwork.GameVersion = gameVersion;
+            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
+
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(PhotonNetwork.NetworkClientState.ToString());
     }
 
     public static string RandomString(int _nLength = 12)
@@ -65,79 +76,63 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     }
 
-    public void Connect()
+    public void SetCharacterType()
     {
-        isConnecting = true;
+        dropDown.Hide();
+        characterType = dropDown.options[dropDown.value].text;
+        Debug.Log(string.Format("Set Character Type {0}", characterType));
+    }
 
-        if (!PhotonNetwork.IsConnected)
-        {
-            // Connect Internet
-            PhotonNetwork.GameVersion = gameVersion;
-            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
-        }
-        else
-        {
-            string inputName = inputField.text;
-            PhotonNetwork.JoinRoom(inputName);
-        }
+    public void Connect(bool _isCreate)
+    {
+        isCreate = _isCreate;
 
+        
+
+        JoinOrCreateRoom();
     }
 
     public override void OnConnectedToMaster()
-    { 
+    {
         base.OnConnectedToMaster();
-        Debug.Log("connection complete!");
-        
-        if(isConnecting && isCreate)
-        {
-            roomName = RandomString();
-            PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = numPlayers }, null);
-        }
-        else if(isConnecting && !isCreate)
-        {
-            string inputName = inputField.text;
-            PhotonNetwork.JoinRoom(inputName);
-        }
+    }
+
+    void JoinOrCreateRoom()
+    {
+        roomName = (isCreate) ? RandomString() : inputField.text;
+        Debug.Log(string.Format("Connection complete! witn name {0}", roomName));
+
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = numPlayers;
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { "CharacterType", characterType } });
+        Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
+
+        //roomOptions.CustomRoomProperties = new Hashtable() { { "CharacterType", characterType } };
+        PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         base.OnDisconnected(cause);
-        Debug.LogWarningFormat("Fail {0}", cause);
+        Debug.LogWarningFormat("OnDisconnected : {0}", cause);
     }
 
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        Debug.Log("Create Room!");
-        Debug.Log(roomName);
 
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
-            Debug.Log("We load the class ");
-
-            //PhotonNetwork.LoadLevel("BasicClassroom");
             PhotonNetwork.LoadLevel(roomType);
         }
         
     }
 
-    public void CreateRoom(string _roomType)
+
+    public void SetRoomTypeAndCreate(string _roomType)
     {
         roomType = _roomType;
-        isConnecting = true;
-        isCreate = true;
-
-        if (!PhotonNetwork.IsConnected)
-        {
-            // Connect Internet
-            PhotonNetwork.GameVersion = gameVersion;
-            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
-        }
-        else
-        {
-            roomName = RandomString();
-            PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = numPlayers }, null);
-        }
+        Connect(true);
     }
 }

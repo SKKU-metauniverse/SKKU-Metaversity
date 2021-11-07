@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -21,7 +22,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        PhotonNetwork.Instantiate("[Woman]", spawn.transform.position, Quaternion.identity);
+        Hashtable CP = PhotonNetwork.LocalPlayer.CustomProperties; //CurrentRoom.CustomProperties;
+        Debug.Log(string.Format("Character Initiate {0}", CP["CharacterType"]));
+        PhotonNetwork.Instantiate((string)CP["CharacterType"], spawn.transform.position, Quaternion.identity);
         C1.enabled = false;
 
         escapePN.SetActive(false);
