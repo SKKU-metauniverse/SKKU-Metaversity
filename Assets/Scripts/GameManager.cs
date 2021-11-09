@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     #region Private
     [SerializeField]
     private GameObject escapePN;
+    [SerializeField]
+    private Text code;
 
     #endregion
 
@@ -35,7 +38,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         // Cursor visible
         Cursor.visible = false;
 
-
+        code.text = PhotonNetwork.CurrentRoom.Name.ToString();
     }
 
 

@@ -87,18 +87,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         isCreate = _isCreate;
 
-        
-
-        JoinOrCreateRoom();
-    }
-
-    public override void OnConnectedToMaster()
-    {
-        base.OnConnectedToMaster();
-    }
-
-    void JoinOrCreateRoom()
-    {
         roomName = (isCreate) ? RandomString() : inputField.text;
         Debug.Log(string.Format("Connection complete! witn name {0}", roomName));
 
