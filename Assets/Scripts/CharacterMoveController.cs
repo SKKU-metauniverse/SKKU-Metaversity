@@ -14,10 +14,15 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     public float moveSpeed = 5.0f;
     public PhotonView PV;
     public Camera Cmine;
+    public GameObject wow, laugh, like, angry, emojiUI;
+    public GameObject emoji_H1, emoji_H2, emoji_H3, emoji_H4;
+    public ParticleSystem particle;
 
     Animator animator;
     string animationState = "Run";
     Vector3 moveDir;
+    bool canLookAround;
+    Vector2 emojiCursor = new Vector2(0, 0);
     // Start is called before the first frame update
     void Start()
     {
@@ -30,10 +35,11 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         }
         Cmine.enabled = true;
 
+        canLookAround = true; //카메라 회전 가능 상태인지
         cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
 
-        Debug.Log(characterBody.transform.localPosition);
-        Debug.Log(cameraArm.transform.localPosition);
+       //Debug.Log(characterBody.transform.localPosition);
+       //Debug.Log(cameraArm.transform.localPosition);
     }
 
     // Update is called once per frame
@@ -44,9 +50,129 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        LookAround();
+        if (canLookAround) LookAround();
         Move();
+        //이모티콘 코드 ***************************************************************
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Emoji();
+        }
+        else if (Input.GetKey(KeyCode.T))
+        {
+            Emojing();
+        }
+        else if (Input.GetKeyUp(KeyCode.T))
+        {
+            EmojiOut();
+        }
+        
     }
+
+    //이모티콘 코드 시작 ************************************************************************************
+    public void Emoji()
+    {
+        //Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.visible = true;
+        canLookAround = false;
+        emojiUI.SetActive(true);
+    }
+
+    public void Emojing()
+    {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        emojiCursor += mouseDelta;
+        emojiCursor.x = Mathf.Clamp(emojiCursor.x, -5f, 5f);
+        emojiCursor.y = Mathf.Clamp(emojiCursor.y, -5f, 5f);
+        float radian = Mathf.Atan2(emojiCursor.y, emojiCursor.x);
+        float angle = radian * 180f / Mathf.PI;
+
+        if(angle > -45 && angle < 45)
+        {
+            emoji_H1.SetActive(true);
+            emoji_H2.SetActive(false);
+            emoji_H3.SetActive(false);
+            emoji_H4.SetActive(false);
+        }
+        else if(angle > 45 && angle < 135)
+        {
+            emoji_H1.SetActive(false);
+            emoji_H2.SetActive(true);
+            emoji_H3.SetActive(false);
+            emoji_H4.SetActive(false);
+        }
+        else if(angle > 135 || angle < -135)
+        {
+            emoji_H1.SetActive(false);
+            emoji_H2.SetActive(false);
+            emoji_H3.SetActive(true);
+            emoji_H4.SetActive(false);
+        }
+        else if(angle < -45 && angle > -135)
+        {
+            emoji_H1.SetActive(false);
+            emoji_H2.SetActive(false);
+            emoji_H3.SetActive(false);
+            emoji_H4.SetActive(true);
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (angle > -45 && angle < 45)
+            {
+                EmojiAngry();
+            }
+            else if (angle > 45 && angle < 135)
+            {
+                EmojiLaugh();
+            }
+            else if (angle > 135 || angle < -135)
+            {
+                EmojiLike();
+            }
+            else if (angle < -45 && angle > -135)
+            {
+                EmojiWow();
+            }
+            EmojiOut();
+        }
+    }
+
+    public void EmojiOut()
+    {
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        canLookAround = true;
+        emojiUI.SetActive(false);
+    }
+
+    public void EmojiAngry()
+    {
+        StartCoroutine(EmojiOn(angry));
+    }
+    public void EmojiWow()
+    {
+        StartCoroutine(EmojiOn(wow));
+    }
+    public void EmojiLike()
+    {
+        StartCoroutine(EmojiOn(like));
+    }
+    public void EmojiLaugh()
+    {
+        StartCoroutine(EmojiOn(laugh));
+    }
+
+    IEnumerator EmojiOn(GameObject emoji)
+    {
+        emoji.SetActive(true);
+        particle.Play();
+        yield return new WaitForSeconds(1f);
+        emoji.SetActive(false);
+        yield return 0;
+    }
+    //이모티콘 코드 끝 ***************************************************************************************
+
+    
 
     private void LookAround()
     {
@@ -103,8 +229,8 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
                 //cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
                 cameraArm.transform.position = new Vector3(characterBody.transform.position.x, characterBody.transform.position.y + GameObject.Find("Spawn").transform.position.y + (float)0.5, characterBody.transform.position.z - (float)0.27);
 
-                Debug.Log(characterBody.transform.localPosition);
-                Debug.Log(cameraArm.transform.localPosition);
+                //Debug.Log(characterBody.transform.localPosition);
+                //Debug.Log(cameraArm.transform.localPosition);
             }
         }
         
