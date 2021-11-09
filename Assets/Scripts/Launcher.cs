@@ -53,11 +53,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(PhotonNetwork.NetworkClientState.ToString());
-    }
-
     public static string RandomString(int _nLength = 12)
     {
         const string strPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";  //문자 생성 풀
@@ -80,24 +75,29 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         dropDown.Hide();
         characterType = dropDown.options[dropDown.value].text;
-        Debug.Log(string.Format("Set Character Type {0}", characterType));
+        //Debug.Log(string.Format("Set Character Type {0}", characterType));
     }
 
     public void Connect(bool _isCreate)
     {
         isCreate = _isCreate;
 
-        roomName = (isCreate) ? RandomString() : inputField.text;
-        Debug.Log(string.Format("Connection complete! witn name {0}", roomName));
-
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = numPlayers;
-
-        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { "CharacterType", characterType } });
-        Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
 
         //roomOptions.CustomRoomProperties = new Hashtable() { { "CharacterType", characterType } };
-        PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);
+        //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
+
+        if (PhotonNetwork.IsConnected)
+        {
+            roomName = (isCreate) ? RandomString() : inputField.text;
+
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.MaxPlayers = numPlayers;
+
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { "CharacterType", characterType } });
+            //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
+
+            PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);
+        }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -110,10 +110,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         base.OnJoinedRoom();
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        {
-            PhotonNetwork.LoadLevel(roomType);
-        }
+        PhotonNetwork.LoadLevel(roomType);
+
+
         
     }
 
