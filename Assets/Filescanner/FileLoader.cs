@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.IO;
+using Paroxe.PdfRenderer;
 
 
 public class FileLoader : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField]
+    private PDFViewer pdfViewer;
+
+    [SerializeField]
+    private GameObject pdfSelectButton;
     [SerializeField]
     private GameObject panelFileViewer;
 
@@ -26,9 +31,20 @@ public class FileLoader : MonoBehaviour
 
     private FileInfo fileInfo;
 
+
     public void OnLoad (FileInfo file)
     {
         panelFileViewer.SetActive(true);
+
+        if ( file.FullName.Contains(".pdf") )
+        {
+            pdfSelectButton.SetActive(true);
+        }
+        else
+        {
+            pdfSelectButton.SetActive(false);
+        }
+            
 
         fileInfo = file;
 
@@ -47,6 +63,10 @@ public class FileLoader : MonoBehaviour
 
     }
 
+    public void SetPDF()
+    {
+        pdfViewer.LoadDocumentFromFile(fileInfo.FullName);
+    }
 
     public void OffLoad()
     {
@@ -54,14 +74,5 @@ public class FileLoader : MonoBehaviour
         panelFileViewer.SetActive(false);
     }
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+ 
 }

@@ -50,8 +50,14 @@ public class DIrectorySpawner : MonoBehaviour
 
         foreach ( FileInfo file in currentDirectory.GetFiles())
         {
-
-            SpawnData(file.Name, DataType.File);
+            if ( file.FullName.Contains(".pdf") )
+            {
+                SpawnData(file.Name, DataType.PDF);
+            }
+            else
+            {
+                SpawnData(file.Name, DataType.File);
+            }
 
         }
 
@@ -83,15 +89,5 @@ public class DIrectorySpawner : MonoBehaviour
         fileList.Add(data);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public enum DataType { Directory = 0, File }
+public enum DataType { Directory = 0, File, PDF }
 
 public class Data : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
@@ -53,6 +53,10 @@ public class Data : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, I
         if (dataType == DataType.Directory)
         {
             textDataName.color = Color.yellow;
+        }
+        else if (dataType == DataType.PDF)
+        {
+            textDataName.color = Color.red;
         }
         else
         {
