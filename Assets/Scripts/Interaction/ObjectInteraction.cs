@@ -21,7 +21,6 @@ abstract public class ObjectInteraction : MonoBehaviour
     {
         if (isLooked)
         {
-            
             outline.enabled = true;
         }
         else
