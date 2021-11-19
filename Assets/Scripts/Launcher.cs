@@ -97,6 +97,11 @@ public class Launcher : MonoBehaviourPunCallbacks
             //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
 
             PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);
+        } else
+        {
+            // Connect Internet
+            PhotonNetwork.GameVersion = gameVersion;
+            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
         }
     }
 
