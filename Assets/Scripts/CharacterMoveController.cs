@@ -61,6 +61,7 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         {
             EmojiOut();
         }
+
     }
 
     //이모티콘 코드 시작 ************************************************************************************
@@ -168,7 +169,7 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     {
         emoji.SetActive(true);
         particle.Play();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         emoji.SetActive(false);
         yield return 0;
     }
