@@ -27,7 +27,7 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     void Start()
     {
         Debug.Log("Start");
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         gameObject.SetActive(true);
         if (!PV.IsMine)
         {

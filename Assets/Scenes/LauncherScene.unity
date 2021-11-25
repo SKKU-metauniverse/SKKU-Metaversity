@@ -1831,7 +1831,7 @@ MonoBehaviour:
     - m_Text: '[Man]'
       m_Image: {fileID: 21300000, guid: 233796cd329c4dd4086a5887a5f972eb, type: 3}
     - m_Text: '[Chicken]'
-      m_Image: {fileID: 21300000, guid: 233796cd329c4dd4086a5887a5f972eb, type: 3}
+      m_Image: {fileID: 21300000, guid: 5f8f16bb4639d674bbdef76cd8f3558c, type: 3}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
