@@ -9,26 +9,26 @@ public class VideoController : MonoBehaviour
     public AudioSource audioSource;
     private bool isMuted = false;
 
-    public void videoPlay() 
+    public void VideoPlay() 
     {
         videoPlayer.Play();
         audioSource.Play();
     }
 
-    public void videoPause()
+    public void VideoPause()
     {
         
         videoPlayer.Pause();
         audioSource.Pause();
     }
 
-    public void videoStop()
+    public void VideoStop()
     {
         videoPlayer.Stop();
         audioSource.Stop();
     }
 
-    public void videoVolume(float vol)
+    public void VideoVolume(float vol)
     {
         audioSource.volume = vol;
 
@@ -38,11 +38,13 @@ public class VideoController : MonoBehaviour
     {
         if (!isMuted)
         {
-            videoPlayer.SetDirectAudioMute(0, true);
+            audioSource.mute = true;
+            isMuted = true;
         }
         else 
         {
-            videoPlayer.SetDirectAudioMute(0, false);
+            audioSource.mute = false;
+            isMuted = false;
         }
     }
 

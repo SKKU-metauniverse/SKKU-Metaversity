@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Video;
 
-public class Interaction_VideoPlay : ObjectInteraction
+public class Interaction_VideoPause : ObjectInteraction
 {
     [SerializeField]
     private VideoController videoController;
@@ -17,6 +16,6 @@ public class Interaction_VideoPlay : ObjectInteraction
 
     public override void Interaction()
     {
-        videoController.VideoPlay();
+        videoController.VideoPause();
     }
 }
