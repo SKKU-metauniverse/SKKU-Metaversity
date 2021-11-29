@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         Hashtable CP = PhotonNetwork.LocalPlayer.CustomProperties; //CurrentRoom.CustomProperties;
-        Debug.Log(string.Format("Character Initiate {0}", CP["CharacterType"]));
+        Debug.Log(string.Format("Character Initiate {0} {1}", CP["CharacterType"], PhotonNetwork.LocalPlayer.NickName));
         PhotonNetwork.Instantiate((string)CP["CharacterType"], spawn.transform.position, Quaternion.identity);
         C1.enabled = false;
 

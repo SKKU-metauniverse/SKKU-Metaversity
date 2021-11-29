@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -23,12 +24,18 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     Vector3 moveDir;
     bool canLookAround;
     Vector2 emojiCursor = new Vector2(0, 0);
+    Text nickName;
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Start");
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
+        nickName = GetComponentInChildren<Text>();
+        nickName.text = PhotonNetwork.LocalPlayer.NickName;
+        Debug.Log(string.Format("Character NickName {0} {1}", nickName, PhotonNetwork.LocalPlayer.NickName));
+
         gameObject.SetActive(true);
+
         if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);

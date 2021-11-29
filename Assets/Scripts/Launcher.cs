@@ -13,7 +13,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField]
     private byte numPlayers = 4;
     [SerializeField]
-    private InputField inputField;
+    private InputField roomCodeInput;
+    [SerializeField]
+    private InputField nickNameInput;
     [SerializeField]
     private GameObject roomTypePN;
     [SerializeField]
@@ -31,7 +33,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
-        
+
         //Cursor active
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
@@ -43,13 +45,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         Screen.SetResolution(960, 540, false);
         roomTypePN.SetActive(false);
 
-        if (!PhotonNetwork.IsConnectedAndReady)
-        {
-            // Connect Internet
-            PhotonNetwork.GameVersion = gameVersion;
-            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
+        ValidateConncection();
+    }
 
-        }
+    private void Update()
+    {
+        ValidateConncection();
     }
 
     // Update is called once per frame
@@ -82,21 +83,27 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         isCreate = _isCreate;
 
-
         //roomOptions.CustomRoomProperties = new Hashtable() { { "CharacterType", characterType } };
         //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
 
         if (PhotonNetwork.IsConnected)
         {
-            roomName = (isCreate) ? RandomString() : inputField.text;
+            Debug.Log("Conncection Try");
+            roomName = (isCreate) ? RandomString() : roomCodeInput.text;
+
+            Hashtable characterOptions = new Hashtable() { { "CharacterType", characterType } };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(characterOptions);
+            PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
 
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = numPlayers;
+            PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);            //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
+            Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
 
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { "CharacterType", characterType } });
-            //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
-
-            PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);
+        }
+        else
+        {
+            ValidateConncection();
         }
     }
 
@@ -113,13 +120,22 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(roomType);
 
 
-        
+
     }
-
-
     public void SetRoomTypeAndCreate(string _roomType)
     {
         roomType = _roomType;
         Connect(true);
+    }
+
+    private void ValidateConncection()
+    {
+        if (!PhotonNetwork.IsConnectedAndReady)
+        {
+            Debug.Log("Conncection Is Failed");
+            PhotonNetwork.GameVersion = gameVersion;
+            PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
+
+        }
     }
 }
