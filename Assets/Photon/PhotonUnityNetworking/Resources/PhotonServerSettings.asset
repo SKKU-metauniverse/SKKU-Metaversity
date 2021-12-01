@@ -40,6 +40,11 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - changeForward
+  - EmojiAngry
+  - EmojiLaugh
+  - EmojiLike
+  - EmojiWow
+  - EmojiOn
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

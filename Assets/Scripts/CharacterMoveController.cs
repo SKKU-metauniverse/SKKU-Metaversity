@@ -40,6 +40,10 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
         }
+        if (!PV.IsMine)
+        {
+            Destroy(GetComponentInChildren<AudioListener>().gameObject);
+        }
         Cmine.enabled = true;
 
         canLookAround = true; //카메라 회전 가능 상태인지
@@ -88,62 +92,66 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         float radian = Mathf.Atan2(emojiCursor.y, emojiCursor.x);
         float angle = radian * 180f / Mathf.PI;
 
-        if (angle > -45 && angle < 45)
-        {
-            emoji_H1.SetActive(true);
-            emoji_H2.SetActive(false);
-            emoji_H3.SetActive(false);
-            emoji_H4.SetActive(false);
-        }
-        else if (angle > 45 && angle < 135)
-        {
-            emoji_H1.SetActive(false);
-            emoji_H2.SetActive(true);
-            emoji_H3.SetActive(false);
-            emoji_H4.SetActive(false);
-        }
-        else if (angle > 135 || angle < -135)
-        {
-            emoji_H1.SetActive(false);
-            emoji_H2.SetActive(false);
-            emoji_H3.SetActive(true);
-            emoji_H4.SetActive(false);
-        }
-        else if (angle < -45 && angle > -135)
-        {
-            emoji_H1.SetActive(false);
-            emoji_H2.SetActive(false);
-            emoji_H3.SetActive(false);
-            emoji_H4.SetActive(true);
-        }
-
-        if (Input.GetKeyDown(KeyCode.X))
+        if (PV.IsMine)
         {
             if (angle > -45 && angle < 45)
             {
-                EmojiAngry();
+                emoji_H1.SetActive(true);
+                emoji_H2.SetActive(false);
+                emoji_H3.SetActive(false);
+                emoji_H4.SetActive(false);
             }
             else if (angle > 45 && angle < 135)
             {
-                EmojiLaugh();
+                emoji_H1.SetActive(false);
+                emoji_H2.SetActive(true);
+                emoji_H3.SetActive(false);
+                emoji_H4.SetActive(false);
             }
             else if (angle > 135 || angle < -135)
             {
-                EmojiLike();
+                emoji_H1.SetActive(false);
+                emoji_H2.SetActive(false);
+                emoji_H3.SetActive(true);
+                emoji_H4.SetActive(false);
             }
             else if (angle < -45 && angle > -135)
             {
-                EmojiWow();
-                Debug.Log("Wow");
+                emoji_H1.SetActive(false);
+                emoji_H2.SetActive(false);
+                emoji_H3.SetActive(false);
+                emoji_H4.SetActive(true);
             }
-            Debug.Log("Out");
-            EmojiOut();
+
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                if (angle > -45 && angle < 45)
+                {
+                    PV.RPC(" EmojiAngry", RpcTarget.AllBuffered);
+                    //EmojiAngry();
+                }
+                else if (angle > 45 && angle < 135)
+                {
+                    //PV.RPC(" EmojiLaugh", RpcTarget.All, null);
+                    EmojiLaugh();
+                }
+                else if (angle > 135 || angle < -135)
+                {
+                    //PV.RPC(" EmojiLike", RpcTarget.All, null);
+                    EmojiLike();
+                }
+                else if (angle < -45 && angle > -135)
+                {
+                    //PV.RPC(" EmojiWow", RpcTarget.All, null);
+                    EmojiWow();
+                    Debug.Log("Wow");
+                }
+                Debug.Log("Out");
+                EmojiOut();
+            }
         }
         
-
-        
-
-
+     
     }
 
     public void EmojiOut()
@@ -154,23 +162,29 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         emojiUI.SetActive(false);
     }
 
+    [PunRPC]
     public void EmojiAngry()
     {
         StartCoroutine(EmojiOn(angry));
     }
+
+    [PunRPC]
     public void EmojiWow()
     {
         StartCoroutine(EmojiOn(wow));
     }
+    [PunRPC]
     public void EmojiLike()
     {
         StartCoroutine(EmojiOn(like));
     }
+    [PunRPC]
     public void EmojiLaugh()
     {
         StartCoroutine(EmojiOn(laugh));
     }
 
+    [PunRPC]
     IEnumerator EmojiOn(GameObject emoji)
     {
         emoji.SetActive(true);

@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     #region Public
     public GameObject spawn;
     public Camera C1;
+    public GameObject fileScanner;
     #endregion
 
     private void Start()
@@ -78,16 +79,27 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
-    public void downPanel()
+    /*public void downPanel()
     {
         // Cursor lock
         Cursor.lockState = CursorLockMode.Locked;
         // Cursor visible
         Cursor.visible = false;
         escapePN.SetActive(false);
+    }*/
+
+
+    public void downPanel()
+    {
+        if (!fileScanner.activeSelf)
+        {
+            // Cursor lock
+            Cursor.lockState = CursorLockMode.Locked;
+            // Cursor visible
+            Cursor.visible = false;
+        }
+
+        escapePN.SetActive(false);
     }
 
-    
-
-    
 }
