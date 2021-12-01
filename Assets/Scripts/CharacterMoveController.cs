@@ -85,15 +85,16 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
 
     public void Emojing()
     {
-        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        emojiCursor += mouseDelta;
-        emojiCursor.x = Mathf.Clamp(emojiCursor.x, -5f, 5f);
-        emojiCursor.y = Mathf.Clamp(emojiCursor.y, -5f, 5f);
-        float radian = Mathf.Atan2(emojiCursor.y, emojiCursor.x);
-        float angle = radian * 180f / Mathf.PI;
 
         if (PV.IsMine)
         {
+            Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            emojiCursor += mouseDelta;
+            emojiCursor.x = Mathf.Clamp(emojiCursor.x, -5f, 5f);
+            emojiCursor.y = Mathf.Clamp(emojiCursor.y, -5f, 5f);
+            float radian = Mathf.Atan2(emojiCursor.y, emojiCursor.x);
+            float angle = radian * 180f / Mathf.PI;
+
             if (angle > -45 && angle < 45)
             {
                 emoji_H1.SetActive(true);
@@ -127,31 +128,28 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
             {
                 if (angle > -45 && angle < 45)
                 {
-                    PV.RPC(" EmojiAngry", RpcTarget.AllBuffered);
-                    //EmojiAngry();
+                    PV.RPC("EmojiAngry", RpcTarget.All);
                 }
                 else if (angle > 45 && angle < 135)
                 {
-                    //PV.RPC(" EmojiLaugh", RpcTarget.All, null);
-                    EmojiLaugh();
+                    PV.RPC("EmojiLaugh", RpcTarget.All);
+                    //EmojiLaugh();
                 }
                 else if (angle > 135 || angle < -135)
                 {
-                    //PV.RPC(" EmojiLike", RpcTarget.All, null);
-                    EmojiLike();
+                    PV.RPC("EmojiLike", RpcTarget.All);
+                    //EmojiLike();
                 }
                 else if (angle < -45 && angle > -135)
                 {
-                    //PV.RPC(" EmojiWow", RpcTarget.All, null);
-                    EmojiWow();
-                    Debug.Log("Wow");
+                    PV.RPC("EmojiWow", RpcTarget.All);
+                    //EmojiWow();
                 }
                 Debug.Log("Out");
                 EmojiOut();
             }
         }
-        
-     
+
     }
 
     public void EmojiOut()
