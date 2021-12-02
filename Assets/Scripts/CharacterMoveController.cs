@@ -31,7 +31,14 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         Debug.Log("Start");
         animator = GetComponentInChildren<Animator>();
         nickName = GetComponentInChildren<Text>();
-        nickName.text = PhotonNetwork.LocalPlayer.NickName;
+        if (photonView.IsMine)
+        {
+            nickName.text = PhotonNetwork.LocalPlayer.NickName;
+        }
+        else
+        {
+            nickName.text = GetComponent<PhotonView>().Owner.NickName;
+        }
         Debug.Log(string.Format("Character NickName {0} {1}", nickName, PhotonNetwork.LocalPlayer.NickName));
 
         gameObject.SetActive(true);
