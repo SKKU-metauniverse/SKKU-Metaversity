@@ -21,13 +21,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     #region Public
     public GameObject spawn;
     public Camera C1;
-    public GameObject fileScanner;
     #endregion
 
     private void Start()
     {
         Hashtable CP = PhotonNetwork.LocalPlayer.CustomProperties; //CurrentRoom.CustomProperties;
-        Debug.Log(string.Format("Character Initiate {0} {1}", CP["CharacterType"], PhotonNetwork.LocalPlayer.NickName));
+        Debug.Log(string.Format("Character Initiate {0}", CP["CharacterType"]));
         PhotonNetwork.Instantiate((string)CP["CharacterType"], spawn.transform.position, Quaternion.identity);
         C1.enabled = false;
 
@@ -79,27 +78,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
-    /*public void downPanel()
+    public void downPanel()
     {
         // Cursor lock
         Cursor.lockState = CursorLockMode.Locked;
         // Cursor visible
         Cursor.visible = false;
         escapePN.SetActive(false);
-    }*/
-
-
-    public void downPanel()
-    {
-        if (!fileScanner.activeSelf)
-        {
-            // Cursor lock
-            Cursor.lockState = CursorLockMode.Locked;
-            // Cursor visible
-            Cursor.visible = false;
-        }
-
-        escapePN.SetActive(false);
     }
 
+    
+
+    
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -24,32 +23,15 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
     Vector3 moveDir;
     bool canLookAround;
     Vector2 emojiCursor = new Vector2(0, 0);
-    Text nickName;
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Start");
-        animator = GetComponentInChildren<Animator>();
-        nickName = GetComponentInChildren<Text>();
-        if (photonView.IsMine)
-        {
-            nickName.text = PhotonNetwork.LocalPlayer.NickName;
-        }
-        else
-        {
-            nickName.text = GetComponent<PhotonView>().Owner.NickName;
-        }
-        Debug.Log(string.Format("Character NickName {0} {1}", nickName, PhotonNetwork.LocalPlayer.NickName));
-
+        animator = GetComponent<Animator>();
         gameObject.SetActive(true);
-
         if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
-        }
-        if (!PV.IsMine)
-        {
-            Destroy(GetComponentInChildren<AudioListener>().gameObject);
         }
         Cmine.enabled = true;
 
@@ -93,70 +75,68 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
 
     public void Emojing()
     {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        emojiCursor += mouseDelta;
+        emojiCursor.x = Mathf.Clamp(emojiCursor.x, -5f, 5f);
+        emojiCursor.y = Mathf.Clamp(emojiCursor.y, -5f, 5f);
+        float radian = Mathf.Atan2(emojiCursor.y, emojiCursor.x);
+        float angle = radian * 180f / Mathf.PI;
 
-        if (PV.IsMine)
+        if (angle > -45 && angle < 45)
         {
-            Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-            emojiCursor += mouseDelta;
-            emojiCursor.x = Mathf.Clamp(emojiCursor.x, -5f, 5f);
-            emojiCursor.y = Mathf.Clamp(emojiCursor.y, -5f, 5f);
-            float radian = Mathf.Atan2(emojiCursor.y, emojiCursor.x);
-            float angle = radian * 180f / Mathf.PI;
+            emoji_H1.SetActive(true);
+            emoji_H2.SetActive(false);
+            emoji_H3.SetActive(false);
+            emoji_H4.SetActive(false);
+        }
+        else if (angle > 45 && angle < 135)
+        {
+            emoji_H1.SetActive(false);
+            emoji_H2.SetActive(true);
+            emoji_H3.SetActive(false);
+            emoji_H4.SetActive(false);
+        }
+        else if (angle > 135 || angle < -135)
+        {
+            emoji_H1.SetActive(false);
+            emoji_H2.SetActive(false);
+            emoji_H3.SetActive(true);
+            emoji_H4.SetActive(false);
+        }
+        else if (angle < -45 && angle > -135)
+        {
+            emoji_H1.SetActive(false);
+            emoji_H2.SetActive(false);
+            emoji_H3.SetActive(false);
+            emoji_H4.SetActive(true);
+        }
 
+        if (Input.GetKeyDown(KeyCode.X))
+        {
             if (angle > -45 && angle < 45)
             {
-                emoji_H1.SetActive(true);
-                emoji_H2.SetActive(false);
-                emoji_H3.SetActive(false);
-                emoji_H4.SetActive(false);
+                EmojiAngry();
             }
             else if (angle > 45 && angle < 135)
             {
-                emoji_H1.SetActive(false);
-                emoji_H2.SetActive(true);
-                emoji_H3.SetActive(false);
-                emoji_H4.SetActive(false);
+                EmojiLaugh();
             }
             else if (angle > 135 || angle < -135)
             {
-                emoji_H1.SetActive(false);
-                emoji_H2.SetActive(false);
-                emoji_H3.SetActive(true);
-                emoji_H4.SetActive(false);
+                EmojiLike();
             }
             else if (angle < -45 && angle > -135)
             {
-                emoji_H1.SetActive(false);
-                emoji_H2.SetActive(false);
-                emoji_H3.SetActive(false);
-                emoji_H4.SetActive(true);
+                EmojiWow();
+                Debug.Log("Wow");
             }
-
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                if (angle > -45 && angle < 45)
-                {
-                    PV.RPC("EmojiAngry", RpcTarget.All);
-                }
-                else if (angle > 45 && angle < 135)
-                {
-                    PV.RPC("EmojiLaugh", RpcTarget.All);
-                    //EmojiLaugh();
-                }
-                else if (angle > 135 || angle < -135)
-                {
-                    PV.RPC("EmojiLike", RpcTarget.All);
-                    //EmojiLike();
-                }
-                else if (angle < -45 && angle > -135)
-                {
-                    PV.RPC("EmojiWow", RpcTarget.All);
-                    //EmojiWow();
-                }
-                Debug.Log("Out");
-                EmojiOut();
-            }
+            Debug.Log("Out");
+            EmojiOut();
         }
+        
+
+        
+
 
     }
 
@@ -168,29 +148,23 @@ public class CharacterMoveController : MonoBehaviourPunCallbacks
         emojiUI.SetActive(false);
     }
 
-    [PunRPC]
     public void EmojiAngry()
     {
         StartCoroutine(EmojiOn(angry));
     }
-
-    [PunRPC]
     public void EmojiWow()
     {
         StartCoroutine(EmojiOn(wow));
     }
-    [PunRPC]
     public void EmojiLike()
     {
         StartCoroutine(EmojiOn(like));
     }
-    [PunRPC]
     public void EmojiLaugh()
     {
         StartCoroutine(EmojiOn(laugh));
     }
 
-    [PunRPC]
     IEnumerator EmojiOn(GameObject emoji)
     {
         emoji.SetActive(true);
