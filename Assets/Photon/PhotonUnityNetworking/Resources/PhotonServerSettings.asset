@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: dfd7ad6a-0c5e-47f2-94b3-613e739d7880
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: a61c76b7-2ce6-46bc-a5d2-f147fb4952dd
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
@@ -45,6 +45,9 @@ MonoBehaviour:
   - EmojiLike
   - EmojiWow
   - EmojiOn
+  - CantHearYou
+  - ChangeColour
+  - HeresWhy
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
