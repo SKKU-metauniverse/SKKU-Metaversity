@@ -34,7 +34,7 @@ Photon Voice
 지 않았다면, 현재 위치에서 가장 가까운 서버로 연결된다. 이 프로젝트에서는 “kr”
 로 명시해 한국 서버로 연결된다.(변경 가능)
 
-(kr 이미지)  
+![image](https://user-images.githubusercontent.com/38908169/147135709-486ca1af-8eec-4fbb-86ec-0b54bd685807.png)
 
 ### 서버 설정
 
@@ -80,7 +80,7 @@ PUN은 Room-based matchmaking을 지원함.
 
 - 방 생성방법
 
-(Launcher scene 이미지)  
+![image](https://user-images.githubusercontent.com/38908169/147135904-4ca63f86-1e29-49e7-b4a0-93c819078f9a.png)
 
 1. NickName 입력, 캐릭터 선택 후 Create 버튼 클릭 
 2. 원하는 Classroom 선택(현재 Basic과 Nature 두 개 있음)
@@ -104,7 +104,7 @@ PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);
 
 - 오브젝트 상호작용
 
-(상호작용 예시 이미지)
+![image](https://user-images.githubusercontent.com/38908169/147135943-3ed61945-513f-47cb-8d77-0936e6a3f7a7.png)
 
 >캐릭터가 상호작용이 가능한 오브젝트를 바라볼 때 오브젝트 하이라이트  
 F키 누르면 상호작용 함수 실행
@@ -151,7 +151,7 @@ abstract public class ObjectInteraction : MonoBehaviour
 
 - 이모티콘 표현
 
-(이모티콘 예시 이미지)
+![image](https://user-images.githubusercontent.com/38908169/147135991-2d184e52-d655-421d-a312-1719914e261a.png)
 
 > T 키를 누르면 이모티콘 선택 가능
 원하는 이모티콘 선택 후 B키 누르기
@@ -160,7 +160,7 @@ abstract public class ObjectInteraction : MonoBehaviour
 
 - 파일스캐너 및 PDF 공유
 
-(파일스캐너 이미지)
+![image](https://user-images.githubusercontent.com/38908169/147136030-bd13f383-3ac0-495a-8238-9b9c0474cc97.png)
 
 > 메뉴의 두 번째 버튼인 File버튼을 클릭 시 파일스캐너 활성화  
   현재 폴더의 파일 및 폴더 정보를 보여주며
@@ -171,14 +171,14 @@ abstract public class ObjectInteraction : MonoBehaviour
 
 - 비디오 공유
 
-(비디오 공유 이미지)
-(인스펙터 창)
+![image](https://user-images.githubusercontent.com/38908169/147136065-55e011cf-85d2-4d1d-9007-a2d676a2ac01.png)
+![image](https://user-images.githubusercontent.com/38908169/147136082-42d0e344-341a-4f1b-8d66-71b78e7610c9.png)
 
 >녹화 강의실에서, 녹화한 강의를 틀기 위해 필요한 비디오 플레이어 Prefab으로,  
 강의실에서 재생할 동영상을 MP4파일로 저장해 에셋으로 넣은 후 비디오 플레이어의
 Video Clip 파라미터에 넣어주면 됨.
 
-(비디오 플레이어 버튼)
+![image](https://user-images.githubusercontent.com/38908169/147136095-d0bcbc68-c060-4b0e-90fb-594e262cec47.png)
 
 >왼쪽부터 재생(노랑), 일시정지(파랑), 초기화(빨강), 음소거(초록) 버튼이며, 버튼 가
 까이에서 상호작용 키인 F를 누르면 해당 버튼의 기능이 실행됨.
