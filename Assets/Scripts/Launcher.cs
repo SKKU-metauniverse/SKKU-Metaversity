@@ -7,26 +7,21 @@ using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-
 public class Launcher : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    private byte numPlayers = 4;
-    [SerializeField]
-    private InputField roomCodeInput;
-    [SerializeField]
-    private InputField nickNameInput;
-    [SerializeField]
-    private GameObject roomTypePN;
-    [SerializeField]
-    private Dropdown dropDown;
+    public GameObject roomTypePN;
+    public GameObject joinRoomPN;
+    public InputField roomCodeInput;
+    public InputField nickNameInput;
+    public Dropdown maxPlayerDropDown;
+    public Dropdown characterDropDown;
+    public Warning warningSys;
 
     string gameVersion = "1";
-
     string roomName;
     string roomType;
     string characterType = "[Woman]";
-    bool isCreate;
+    List<RoomInfo> roomList;
 
     private static System.Random random = new System.Random((int)DateTime.Now.Ticks & 0x0000FFFF); //랜덤 시드값
 
@@ -45,15 +40,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         Screen.SetResolution(960, 540, false);
         roomTypePN.SetActive(false);
 
-        ValidateConncection();
+        CheckAndReadyConncection();
     }
 
-    private void Update()
-    {
-        ValidateConncection();
-    }
-
-    // Update is called once per frame
     public static string RandomString(int _nLength = 12)
     {
         const string strPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";  //문자 생성 풀
@@ -66,76 +55,119 @@ public class Launcher : MonoBehaviourPunCallbacks
         string strRet = new String(chRandom);   // char to string
         return strRet;
     }
-    public void TurnOnRoomTypePanel()
-    {
-        roomTypePN.SetActive(true);
 
-    }
+    public void TurnOnRoomTypePanel() => roomTypePN.SetActive(true);
+    public void TurnOffRoomTypePanel() => roomTypePN.SetActive(false);
+    public void TurnOnJoinRoomPanel() => joinRoomPN.SetActive(true);
+    public void TurnOffJoinRoomPanel() => joinRoomPN.SetActive(false);
 
     public void SetCharacterType()
     {
-        dropDown.Hide();
-        characterType = dropDown.options[dropDown.value].text;
-        //Debug.Log(string.Format("Set Character Type {0}", characterType));
+        characterDropDown.Hide();
+        characterType = characterDropDown.options[characterDropDown.value].text;
     }
 
-    public void Connect(bool _isCreate)
+    public void JoinRoom()
     {
-        isCreate = _isCreate;
-
-        //roomOptions.CustomRoomProperties = new Hashtable() { { "CharacterType", characterType } };
-        //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
+        if (!ValidateNickName()) return;
 
         if (PhotonNetwork.IsConnected)
         {
-            Debug.Log("Conncection Try");
-            roomName = (isCreate) ? RandomString() : roomCodeInput.text;
+            Hashtable characterOptions = new Hashtable() { { "CharacterType", characterType } };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(characterOptions);
+            PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
+
+            roomName = roomCodeInput.text;
+            if (!ValidateRoomCode()) return;
+
+            PhotonNetwork.JoinRoom(roomName);
+        }
+        else CheckAndReadyConncection();
+    }
+
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
+        if(PhotonNetwork.CurrentRoom.PlayerCount == 1) PhotonNetwork.LoadLevel(roomType);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        base.OnJoinRoomFailed(returnCode, message);
+        warningSys.PopWarningMsg(message);
+    }
+
+
+    public void SetRoomTypeAndCreate(string _roomType)
+    {
+        roomType = _roomType;
+
+        if (!ValidateNickName()) return;
+
+        if (PhotonNetwork.IsConnected)
+        {
+            Debug.Log("Create Room");
+            roomName = RandomString();
 
             Hashtable characterOptions = new Hashtable() { { "CharacterType", characterType } };
             PhotonNetwork.LocalPlayer.SetCustomProperties(characterOptions);
             PhotonNetwork.LocalPlayer.NickName = nickNameInput.text;
 
             RoomOptions roomOptions = new RoomOptions();
-            roomOptions.MaxPlayers = numPlayers;
-            PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);            //Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
-            Debug.Log(string.Format("Create or Join Room! {0}, {1}", roomName, PhotonNetwork.LocalPlayer.ToStringFull()));
 
+            Debug.Log("Setting max player Room");
+            print(maxPlayerDropDown.options[maxPlayerDropDown.value].text);
+            print(Convert.ToByte(maxPlayerDropDown.value + 1));
+            roomOptions.MaxPlayers = Convert.ToByte(maxPlayerDropDown.value + 1);
+
+            PhotonNetwork.CreateRoom(roomName, roomOptions);
         }
         else
         {
-            ValidateConncection();
+            CheckAndReadyConncection();
         }
     }
 
-    public override void OnDisconnected(DisconnectCause cause)
+    public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        base.OnDisconnected(cause);
-        Debug.LogWarningFormat("OnDisconnected : {0}", cause);
+        base.OnCreateRoomFailed(returnCode, message);
+        warningSys.PopWarningMsg(message);
     }
-
-    public override void OnJoinedRoom()
-    {
-        base.OnJoinedRoom();
-
-        PhotonNetwork.LoadLevel(roomType);
-
-
-
-    }
-    public void SetRoomTypeAndCreate(string _roomType)
-    {
-        roomType = _roomType;
-        Connect(true);
-    }
-
-    private void ValidateConncection()
+    private void CheckAndReadyConncection()
     {
         if (!PhotonNetwork.IsConnectedAndReady)
         {
             Debug.Log("Conncection Is Failed");
             PhotonNetwork.GameVersion = gameVersion;
             PhotonNetwork.ConnectUsingSettings(); //call OnConnectedToMaster
-
         }
     }
+
+    private bool ValidateNickName()
+    {
+        if (nickNameInput.text.Trim().Length == 0)
+        {
+            roomTypePN.SetActive(false);
+            joinRoomPN.SetActive(false);
+            warningSys.PopWarningMsg("Check Your Nickname!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool ValidateRoomCode()
+    {
+        if (roomName.Trim().Length == 0)
+        {
+            joinRoomPN.SetActive(false);
+            warningSys.PopWarningMsg("Check Your RoomCode!");
+            return false;
+        }
+
+        return true;
+    }
+
+    
+
 }
