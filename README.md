@@ -78,11 +78,20 @@ public static string RandomString(int _nLength = 12)
 
 PUN은 Room-based matchmaking을 지원함.
 
+![launcher](https://user-images.githubusercontent.com/33747749/147245271-52e2c3b9-b4b8-410f-900b-cad9b5ecd8ad.png)
+
+- 캐릭터 설정
+
+![character setting](https://user-images.githubusercontent.com/33747749/147245450-bf004f23-5a62-4ed5-bf0c-bef608966344.png)
+
+1. NickName 입력, 캐릭터 설정
+2. 방을 생성하고 싶으면 `CREATE ROOM` 버튼을, 이미 만들어진 방에 참여하기 위해서는 `JOIN ROOM` 클릭
+
 - 방 생성방법
 
-![image](https://user-images.githubusercontent.com/38908169/147135904-4ca63f86-1e29-49e7-b4a0-93c819078f9a.png)
+![create room](https://user-images.githubusercontent.com/33747749/147245394-e438fc2e-af15-4997-8f0e-625031a89ed6.png)
 
-1. NickName 입력, 캐릭터 선택 후 Create 버튼 클릭 
+1. 최대 참여 가능한 플레이어 수 설정
 2. 원하는 Classroom 선택(현재 Basic과 Nature 두 개 있음)
 3. ESC를 누르면 메뉴 창 활성화, 방 코드 확인
 
@@ -93,9 +102,10 @@ PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, null);
 
 - 방 참여 방법
 
-1. NickName 입력, 캐릭터 설정
-2. 호스트로부터 받은 방 코드 입력
-3. Join Button 클릭
+![join room](https://user-images.githubusercontent.com/33747749/147245360-949afb18-0db7-4413-a082-3824620aba76.png)
+
+1. 호스트로부터 받은 방 코드 입력
+2. Join Button 클릭
 
 
 ## 인게임 로직
